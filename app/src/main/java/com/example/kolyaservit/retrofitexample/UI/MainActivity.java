@@ -1,31 +1,19 @@
 package com.example.kolyaservit.retrofitexample.UI;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.kolyaservit.retrofitexample.R;
-import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.GitHubAPI;
-import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.Repository;
-import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAPI;
-import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.GoogleAddress;
-import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.Result;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
+    private Fragment activeFragment;
+
+    private TabLayout tabBottom;
 
     public static String TAG = "TAG_RETROFIT";
 
@@ -35,19 +23,52 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        addFragment(R.id.fragment_1, SearchAddressFragment.class);
-        addFragment(R.id.fragment_2, ExampleFragment.class);
-        addFragment(R.id.fragment_3, NewExampleFragment.class);
+        updateFragment(R.id.single_fragment_main, SearchAddressFragment.class);
+
+        tabBottom = findViewById(R.id.tab_bottom);
+        tabBottom.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        updateFragment(R.id.single_fragment_main, SearchAddressFragment.class);
+                        break;
+                    case 1:
+                        updateFragment(R.id.single_fragment_main, ExampleFragment.class);
+                        break;
+                    case 2:
+                        updateFragment(R.id.single_fragment_main, NewExampleFragment.class);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+    }
+
+    protected void updateFragment(int id, Class fragment) {
+        if (activeFragment != null) {
+            removeFragment(activeFragment);
+        }
+        addFragment(id, fragment);
+    }
+
+    protected void removeFragment(Fragment fragment) {
+        fragmentManager.beginTransaction()
+                .remove(fragment).commit();
     }
 
     protected void addFragment(int id, Class fragment) {
         try {
-            Fragment exampleFragment = fragmentManager.findFragmentById(id);
-            if (exampleFragment == null) {
-                exampleFragment = (Fragment) fragment.newInstance();
-                fragmentManager.beginTransaction()
-                        .add(id, exampleFragment).commit();
-            }
+            Fragment exampleFragment = (Fragment) fragment.newInstance();
+            fragmentManager.beginTransaction().add(id, exampleFragment).commit();
+            activeFragment = exampleFragment;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
