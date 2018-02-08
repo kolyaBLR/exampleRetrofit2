@@ -1,4 +1,4 @@
-package com.example.kolyaservit.retrofitexample.Retrofit.Google;
+package com.example.kolyaservit.retrofitexample.Retrofit.Google.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

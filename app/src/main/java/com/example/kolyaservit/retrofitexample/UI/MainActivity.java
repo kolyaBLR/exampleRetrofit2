@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.kolyaservit.retrofitexample.R;
-import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.GitHubAPI;
 import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.Repository;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAPI;
-import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAddress;
+import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.GoogleAddress;
+import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.Result;
 
 import java.util.List;
 
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         addFragment(R.id.second_fragment, ExampleFragment.class);
         addFragment(R.id.first_fragment, NewExampleFragment.class);
 
-        GoogleAPI.getApi().searchAddress("Минск", false).enqueue(responseGoogleApi);
-        GitHubAPI.getApi().getUserRepos("KolyaBLR").enqueue(responseGitHub);
+        GoogleAPI.getApi().searchAddress("Минск").enqueue(responseGoogleApi);
+        //GitHubAPI.getApi().getUserRepos("KolyaBLR").enqueue(responseGitHub);
     }
 
     protected void addFragment(int id, Class fragment) {
@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private Callback<GoogleAddress> responseGoogleApi = new Callback<GoogleAddress>() {
         @Override
         public void onResponse(Call<GoogleAddress> call, Response<GoogleAddress> response) {
+            String value = response.body().getResults().get(0).getFormattedAddress();
             Log.d(TAG, "onResponse: " + response.body().getStatus());
+            Log.d(TAG, "onResponse: " + value);
         }
 
         @Override
