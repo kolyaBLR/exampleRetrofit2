@@ -5,8 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.kolyaservit.retrofitexample.R;
+import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.GitHubAPI;
 import com.example.kolyaservit.retrofitexample.Retrofit.GitHub.Repository;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAPI;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.GoogleAddress;
@@ -30,11 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        addFragment(R.id.second_fragment, ExampleFragment.class);
-        addFragment(R.id.first_fragment, NewExampleFragment.class);
-
-        GoogleAPI.getApi().searchAddress("Минск").enqueue(responseGoogleApi);
-        //GitHubAPI.getApi().getUserRepos("KolyaBLR").enqueue(responseGitHub);
+        addFragment(R.id.fragment_1, SearchAddressFragment.class);
+        addFragment(R.id.fragment_2, ExampleFragment.class);
+        addFragment(R.id.fragment_3, NewExampleFragment.class);
     }
 
     protected void addFragment(int id, Class fragment) {
@@ -43,36 +46,10 @@ public class MainActivity extends AppCompatActivity {
             if (exampleFragment == null) {
                 exampleFragment = (Fragment) fragment.newInstance();
                 fragmentManager.beginTransaction()
-                        .add(R.id.second_fragment, exampleFragment).commit();
+                        .add(id, exampleFragment).commit();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
-    private Callback<GoogleAddress> responseGoogleApi = new Callback<GoogleAddress>() {
-        @Override
-        public void onResponse(Call<GoogleAddress> call, Response<GoogleAddress> response) {
-            String value = response.body().getResults().get(0).getFormattedAddress();
-            Log.d(TAG, "onResponse: " + response.body().getStatus());
-            Log.d(TAG, "onResponse: " + value);
-        }
-
-        @Override
-        public void onFailure(Call<GoogleAddress> call, Throwable t) {
-            Log.e(TAG, "onFailure: ", t);
-        }
-    };
-
-    private Callback<List<Repository>> responseGitHub = new Callback<List<Repository>>() {
-        @Override
-        public void onResponse(Call<List<Repository>> call, Response<List<Repository>> response) {
-            Log.d(TAG, "onResponse: success");
-        }
-
-        @Override
-        public void onFailure(Call<List<Repository>> call, Throwable t) {
-            Log.e(TAG, "onFailure: error", t);
-        }
-    };
 }
