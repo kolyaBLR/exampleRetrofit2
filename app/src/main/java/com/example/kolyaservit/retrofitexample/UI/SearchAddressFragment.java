@@ -14,6 +14,7 @@ import com.example.kolyaservit.retrofitexample.R;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAPI;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.GoogleAddress;
 import com.example.kolyaservit.retrofitexample.UI.MainActivity;
+import com.google.android.gms.maps.MapView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,15 +25,18 @@ public class SearchAddressFragment extends Fragment {
     private EditText searchText;
     private Button searchButton;
     private TextView resultSearch;
+    private MapView mapView;
+
+    private final String RESULT_SEARCH_TAG = "SearchAddressFragment_resultSearch";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search_address, container, false);
-
         searchText = v.findViewById(R.id.search_edit_text);
         searchButton = v.findViewById(R.id.search_button);
         resultSearch = v.findViewById(R.id.result_text_view);
+        mapView = v.findViewById(R.id.map_address);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +57,14 @@ public class SearchAddressFragment extends Fragment {
             try {
                 String address = response.body().getResults().get(0).getFormattedAddress();
                 resultSearch.setText(address);
-            } catch (Exception ignored) {
-                resultSearch.setText("Ничего не найдено.");
+            } catch (Exception ex) {
+                resultSearch.setText(R.string.not_found);
             }
         }
 
         @Override
         public void onFailure(Call<GoogleAddress> call, Throwable t) {
-            Log.e(MainActivity.TAG, "onFailure: ", t);
+            resultSearch.setText(R.string.error_server);
         }
     };
 }

@@ -11,7 +11,9 @@ import com.example.kolyaservit.retrofitexample.R;
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
-    private Fragment activeFragment;
+    private Fragment searchAddressFragment = new SearchAddressFragment();
+    private Fragment exampleFragment = new ExampleFragment();
+    private Fragment newExampleFragment = new NewExampleFragment();
 
     private TabLayout tabBottom;
 
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        updateFragment(R.id.single_fragment_main, SearchAddressFragment.class);
+        addFragment(R.id.single_fragment_main, searchAddressFragment);
 
         tabBottom = findViewById(R.id.tab_bottom);
         tabBottom.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -31,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        updateFragment(R.id.single_fragment_main, SearchAddressFragment.class);
+                        addFragment(R.id.single_fragment_main, searchAddressFragment);
                         break;
                     case 1:
-                        updateFragment(R.id.single_fragment_main, ExampleFragment.class);
+                        addFragment(R.id.single_fragment_main, exampleFragment);
                         break;
                     case 2:
-                        updateFragment(R.id.single_fragment_main, NewExampleFragment.class);
+                        addFragment(R.id.single_fragment_main, newExampleFragment);
                         break;
                 }
             }
@@ -52,25 +54,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void updateFragment(int id, Class fragment) {
-        if (activeFragment != null) {
-            removeFragment(activeFragment);
-        }
-        addFragment(id, fragment);
-    }
-
-    protected void removeFragment(Fragment fragment) {
-        fragmentManager.beginTransaction()
-                .remove(fragment).commit();
-    }
-
-    protected void addFragment(int id, Class fragment) {
-        try {
-            Fragment exampleFragment = (Fragment) fragment.newInstance();
-            fragmentManager.beginTransaction().add(id, exampleFragment).commit();
-            activeFragment = exampleFragment;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    protected void addFragment(int id, Fragment fragment) {
+        fragmentManager.beginTransaction().replace(id, fragment).commit();
     }
 }

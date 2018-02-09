@@ -6,4 +6,6 @@
     <string name="fragment_title">hello My Custom Fragment!</string>
     <string name="search">Поиск</string>
     <string name="hint_add_address">Введите адрес</string>
+    <string name="not_found">Ничего не найдено.</string>
+    <string name="error_server">Произошла ошибка описка.</string>
 </resources>
