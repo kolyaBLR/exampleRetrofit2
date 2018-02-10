@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private Fragment searchAddressFragment = new SearchAddressFragment();
-    private Fragment exampleFragment = new ExampleFragment();
+    private Fragment exampleFragment = new SearchUserRepositoriesFragment();
     private Fragment newExampleFragment = new NewExampleFragment();
 
     private TabLayout tabBottom;

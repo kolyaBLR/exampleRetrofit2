@@ -2,18 +2,17 @@ package com.example.kolyaservit.retrofitexample.UI;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.kolyaservit.retrofitexample.R;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.GoogleAPI;
 import com.example.kolyaservit.retrofitexample.Retrofit.Google.data.GoogleAddress;
+import com.example.kolyaservit.retrofitexample.Rx.RxEditText;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +43,7 @@ public class SearchAddressFragment extends Fragment {
         @Override
         public void onResponse(Call<GoogleAddress> call, Response<GoogleAddress> response) {
             try {
+                Log.d(MainActivity.TAG, "onResponse: " + call.request().url());
                 String address = response.body().getResults().get(0).getFormattedAddress();
                 resultSearch.setText(address);
             } catch (Exception ex) {

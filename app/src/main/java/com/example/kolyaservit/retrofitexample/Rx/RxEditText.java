@@ -1,4 +1,4 @@
-package com.example.kolyaservit.retrofitexample.UI;
+package com.example.kolyaservit.retrofitexample.Rx;
 
 import android.text.Editable;
 import android.text.TextWatcher;
